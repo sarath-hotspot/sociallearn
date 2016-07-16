@@ -6,3 +6,24 @@
 .DS_Store
 /build
 /captures
+
+*.apk
+*.dex
+*.class
+
+bin/
+gen/
+out/
+.gradle/
+build/
+
+# Intellij
+*.iml
+.idea/workspace.xml
+.idea/libraries
+
+# Keystore files
+*.jks
+
+
+backend/build

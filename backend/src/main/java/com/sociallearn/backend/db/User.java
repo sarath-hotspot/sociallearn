@@ -1,0 +1,48 @@
+package com.sociallearn.backend.db;
+
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+
+/**
+ * Created by Sarath on 16-07-2016.
+ */
+@Entity
+public class User {
+    @Id
+    private String userId;
+    private String userName;
+    private String area;
+    private String gcmRegistrationId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getGcmRegistrationId() {
+        return gcmRegistrationId;
+    }
+
+    public void setGcmRegistrationId(String gcmRegistrationId) {
+        this.gcmRegistrationId = gcmRegistrationId;
+    }
+}
