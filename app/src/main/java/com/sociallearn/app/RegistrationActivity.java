@@ -1,5 +1,6 @@
 package com.sociallearn.app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,17 +13,31 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
+import com.sociallearn.app.utils.SessionManager;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -31,8 +46,10 @@ public class RegistrationActivity extends AppCompatActivity {
     private static final String TWITTER_SECRET = "khbdJeIZK0t6tUTKENRRVNeMCSttiUJnvx4hsA4rKJgpuzWd8t";
     AuthCallback nc;
     Spinner spinner1,gender;
-    String gend,area;
+    String gend,area,nam,phn,ag;
     EditText name,phno,age;
+    ProgressDialog progressdiag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +62,11 @@ public class RegistrationActivity extends AppCompatActivity {
         phno = (EditText)findViewById(R.id.phno);
         age = (EditText)findViewById(R.id.age);
 
+        progressdiag = new ProgressDialog(this);
+        progressdiag.setIndeterminate(false);
+        progressdiag.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressdiag.setMessage("Loading...");
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new Digits());
         nc = new AuthCallback() {
@@ -53,9 +75,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 // TODO: associate the session userID with your user model
                 /*Toast.makeText(getApplicationContext(), "Authentication successful for "
                         + phoneNumber, Toast.LENGTH_LONG).show();*/
-                Intent in = new Intent(getApplicationContext(),CatagoryActivity.class);
-                startActivity(in);
-                finish();
+                register(nam,phn,ag,gend,area);
 
             }
 
@@ -121,10 +141,67 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void submit(View v){
-        String nam = name.getText().toString();
-        String phn = phno.getText().toString();
-        String ag = age.getText().toString();
+        nam = name.getText().toString();
+        phn = phno.getText().toString();
+        ag = age.getText().toString();
         Digits.authenticate(nc,"+91"+phn);
+
+
+    }
+
+    void register(final String name,final String phn,final String age,final String gender,final String area){
+        progressdiag.show();
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url = "https://sociallearn-1310.appspot.com/_ah/api/userApi/v1/registerUser";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("Waterwala", "Response is: " + response);
+                        try {
+                            SessionManager session = new SessionManager(getApplicationContext());
+                            session.createLoginSession(phn,nam);
+                            Intent in = new Intent(getApplicationContext(),CatagoryActivity.class);
+                            startActivity(in);
+                            finish();
+
+                        }catch(Exception e){
+                            Log.i("Waterwala", "error here: ");
+                        }
+                        //session.setMachineID("WPBR00001");
+
+                        progressdiag.dismiss();
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Waterwala", "That didn't work!");
+            }
+
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("age", age);
+                params.put("gender", gender);
+                params.put("userArea", area);
+                params.put("userId", phn);
+                params.put("userName", name);
+
+
+                return params;
+            }
+        };
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
 
     }
 

@@ -34,7 +34,7 @@ public class ScrollingActivity extends AppCompatActivity {
     ProgressDialog progressdiag;
     TextView desc;
     String startupid;
-    Button button,survey;
+    Button button,survey,button2;
     String packageName;
     SessionManager sessionManager;
     String name;
@@ -55,6 +55,7 @@ public class ScrollingActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         startupid = b.getString("id");
         button = (Button)findViewById(R.id.button);
+        button2 = (Button)findViewById(R.id.button2);
         survey = (Button)findViewById(R.id.survey);
         survey.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +63,9 @@ public class ScrollingActivity extends AppCompatActivity {
                 Intent in = new Intent(getApplicationContext(),SurveyActivity.class);
                 in.putExtra("id",startupid);
                 startActivity(in);
+                survey.setVisibility(View.GONE);
+                button2.setText("Help Others");
+
             }
         });
 
@@ -71,6 +75,7 @@ public class ScrollingActivity extends AppCompatActivity {
         if(status.equals("Installed")){
 
             button.setText("Open App");
+            button2.setText("Need Help?");
             survey.setVisibility(View.VISIBLE);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -137,6 +137,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
     public void submit(View view) {
 
+        finish();
 
     }
 

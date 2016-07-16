@@ -8,16 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.sociallearn.app.utils.SessionManager;
+
 public class CatagoryActivity extends AppCompatActivity {
 
+    SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catagory);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
+        session = new SessionManager(getApplicationContext());
+        if(!session.isLoggedIn()) {
+            session.checkLogin();
+            return;
+        }
     }
     public void ecommerce(View view) {
         Intent in = new Intent(this,StartupListActivity.class);
@@ -37,7 +43,7 @@ public class CatagoryActivity extends AppCompatActivity {
         startActivity(in);
 
     }
-    public void services(View view) {
+    public void service(View view) {
         Intent in = new Intent(this,StartupListActivity.class);
         in.putExtra("interestid","5707702298738688");
         startActivity(in);

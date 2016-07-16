@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.sociallearn.app.RegistrationActivity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -110,15 +112,15 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String custid, String email){
+    public void createLoginSession(String phno, String name){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
         // Storing name in pref
-        editor.putString(KEY_CUSTID, custid);
+        editor.putString(KEY_PHNO, phno);
 
         // Storing email in pref
-        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_NAME, name);
 
         editor.commit();
     }
@@ -130,13 +132,13 @@ public class SessionManager {
      * If false it will redirect user to login page
      * Else won't do anything
      * */
-   /* public void checkLogin() {
+    public void checkLogin() {
         // Check login status
         if(!this.isLoggedIn()) {
             editor.clear();
             editor.commit();
             // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, StartActivity.class);
+            Intent i = new Intent(_context, RegistrationActivity.class);
             // Closing all the Activities
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -147,7 +149,7 @@ public class SessionManager {
             _context.startActivity(i);
         }
 
-    }*/
+    }
 
 
 
@@ -218,13 +220,13 @@ public class SessionManager {
     public String getChannel(){
         return pref.getString(KEY_CHANNEL,"");
     }
-   /* public void logoutUser(){
+    public void logoutUser(){
         // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
 
         // After logout redirect user to Loing Activity
-        Intent i = new Intent(_context, StartActivity.class);
+        Intent i = new Intent(_context, RegistrationActivity.class);
         // Closing all the Activities
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -233,7 +235,7 @@ public class SessionManager {
 
         // Staring Login Activity
         _context.startActivity(i);
-    }*/
+    }
 
 
 
