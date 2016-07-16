@@ -12,6 +12,7 @@ package com.sociallearn.app.utils;
         import android.widget.ImageView;
         import android.widget.TextView;
         import com.sociallearn.app.R;
+        import com.squareup.picasso.Picasso;
 
         import java.util.ArrayList;
 
@@ -53,7 +54,7 @@ public class StartupRecyclerViewAdapter extends RecyclerView
     }
 
     public StartupRecyclerViewAdapter(Context context, ArrayList<StartupObject> myDataset) {
-        context = context;
+        this.context = context;
         mDataset = myDataset;
     }
 
@@ -69,7 +70,7 @@ public class StartupRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        //Picasso.with(context).load(mDataset.get(position).getLogourl()).into(holder.icon);
+        Picasso.with(context).load(mDataset.get(position).getLogourl()).into(holder.icon);
         holder.label.setText(mDataset.get(position).getmText1());
         holder.dateTime.setText(mDataset.get(position).getmText2());
         holder.status.setText(mDataset.get(position).getStatus());

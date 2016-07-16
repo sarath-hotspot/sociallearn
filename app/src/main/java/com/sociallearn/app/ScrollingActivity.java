@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sociallearn.app.utils.SessionManager;
 import com.sociallearn.app.utils.StartupObject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +39,7 @@ public class ScrollingActivity extends AppCompatActivity {
     Button button,survey,button2;
     String packageName;
     SessionManager sessionManager;
+    ImageView iv;
     String name;
 
     @Override
@@ -44,6 +47,7 @@ public class ScrollingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        iv = (ImageView) findViewById(R.id.prof_img_picBackground);
         setSupportActionBar(toolbar);
 
         //setTitle("WaterWala");
@@ -54,6 +58,7 @@ public class ScrollingActivity extends AppCompatActivity {
         progressdiag.setMessage("Loading...");
         Bundle b = getIntent().getExtras();
         startupid = b.getString("id");
+
         button = (Button)findViewById(R.id.button);
         button2 = (Button)findViewById(R.id.button2);
         survey = (Button)findViewById(R.id.survey);
@@ -153,6 +158,7 @@ public class ScrollingActivity extends AppCompatActivity {
                             JSONObject output = new JSONObject(response);
                             desc.setText(Html.fromHtml(output.getString("startupDescription")));
                             packageName = output.getString("androidPackageId");
+                            Picasso.with(getApplicationContext()).load(output.getString("bannerUrl")).into(iv);
                             //setTitle(output.getString("startupName"));
 
 
