@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -34,7 +35,8 @@ dependencies {
     compile 'com.android.support:design:23.0.0'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.google.android.gms:play-services-gcm:8.3.0'
+    compile 'com.google.android.gms:play-services-gcm:9.0.0'
+    compile 'com.applozic.communication.uiwidget:mobicomkitui:4.51'
     compile project(path: ':backend', configuration: 'android-endpoints')
     compile('com.digits.sdk.android:digits:1.11.1@aar') {
         transitive = true;

@@ -109,4 +109,8 @@
     <string name="title_activity_catagory">CatagoryActivity</string>
     <string name="title_activity_survey">SurveyActivity</string>
     <string name="title_activity_registration">RegistrationActivity</string>
+
+    <!-- This is google console project id -->
+    <string name="gcm_sender_id">608103985690</string>
+    <string name="default_media_location_folder">SocialLearn</string>
 </resources>
