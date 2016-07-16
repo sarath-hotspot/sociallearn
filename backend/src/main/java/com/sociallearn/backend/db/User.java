@@ -15,7 +15,7 @@ public class User {
     private String userName;
     private String area;
     private String gender;
-    private Date dob;
+    private Integer age;
     private String gcmRegistrationId;
 
     public String getUserId() {
@@ -58,11 +58,11 @@ public class User {
         this.gender = gender;
     }
 
-    public Date getDob() {
-        return dob;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

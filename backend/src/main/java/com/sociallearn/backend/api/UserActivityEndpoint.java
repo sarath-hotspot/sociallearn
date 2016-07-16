@@ -7,8 +7,10 @@ import com.google.api.server.spi.config.DefaultValue;
 import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.config.Nullable;
 import com.google.appengine.repackaged.com.google.api.client.util.DateTime;
+import com.googlecode.objectify.Key;
 import com.sociallearn.backend.OfyService;
 import com.sociallearn.backend.bean.UserActivityApiStatus;
+import com.sociallearn.backend.db.User;
 import com.sociallearn.backend.db.UserActivity;
 import com.sociallearn.backend.db.UserStatupStatus;
 
@@ -35,7 +37,8 @@ public class UserActivityEndpoint {
     public UserActivityApiStatus userInstalledStartupApp(
             @Named("userId") String userId,
             @Named("startupId") Long startupId,
-            @Named("updatedTime") @Nullable Date updatedTime) {
+            @Named("updatedTime") @Nullable Date updatedTime)
+    {
         updateUserStatus(userId, startupId, updatedTime, UserStatupStatus.USER_STARTUP_STATUS_INSTALLED);
         return new UserActivityApiStatus("Success");
     }
@@ -59,11 +62,12 @@ public class UserActivityEndpoint {
             @Named("startupId") Long startupId,
             @Named("updatedTime") @Nullable Date updatedTime) {
         updateUserStatus(userId, startupId, updatedTime, UserStatupStatus.USER_STARTUP_STATUS_LEARNER);
-        // FIXME Start process to match learner with mentor
         // and send notifications to both of them to open their chat
         // send mentor info in chat window.
+        FindMentorEndpoint.enqueueTaskToFindMentor(userId, startupId);
         return new UserActivityApiStatus("Success");
     }
+
 
 
     /**
@@ -80,6 +84,12 @@ public class UserActivityEndpoint {
             updatedTime = new Date();
         }
 
+        // Validate user
+        User user = OfyService.ofy().load().key(Key.create(User.class, userId)).now();
+        if (user == null) {
+            throw new RuntimeException("Could not find user with id " + userId);
+        }
+
         // Update user activity.
         UserActivity userActivity = new UserActivity();
         userActivity.setUserId(userId);
@@ -93,6 +103,9 @@ public class UserActivityEndpoint {
         finalStatus.setId(userId + "/" + startupId);
         finalStatus.setStartupId(startupId);
         finalStatus.setUserId(userId);
+        finalStatus.setUserArea(user.getArea());
+        finalStatus.setFindMentorKeyStartupidAreaStatus(
+                UserStatupStatus.constructFindMentorKey(startupId, user.getArea(), userStartupStatus));
         finalStatus.setUpdatedTime(updatedTime);
         finalStatus.setStatus(userStartupStatus);
         OfyService.ofy().save().entity(finalStatus).now();

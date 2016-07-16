@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+    <!-- Since we are querying on multiple fields, multi-field index -->
+    <datastore-index ancestor="false" kind="SurveyQuestion" source="manual">
+        <property name="startupId" direction="asc" />
+        <property name="questionOrder" direction="asc" />
+    </datastore-index>
+</datastore-indexes>

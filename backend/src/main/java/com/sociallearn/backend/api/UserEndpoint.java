@@ -48,7 +48,7 @@ public class UserEndpoint {
             @Named("userName") String name,
             @Named("userArea") String area,
             @Named("gender") String gender,
-            @Named("dob") Date dob) {
+            @Named("age") Integer age) {
         User existingUser = ObjectifyService.ofy().load().key(Key.create(User.class, userId)).now();
         if (existingUser != null) {
             existingUser.setUserName(name);
@@ -58,7 +58,7 @@ public class UserEndpoint {
             existingUser.setUserId(userId);
             existingUser.setUserName(name);
             existingUser.setArea(area);
-            existingUser.setDob(dob);
+            existingUser.setAge(age);
             existingUser.setGender(gender);
         }
         OfyService.ofy().save().entity(existingUser).now();

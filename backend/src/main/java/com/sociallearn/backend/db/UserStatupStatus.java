@@ -2,6 +2,7 @@ package com.sociallearn.backend.db;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 import java.util.Date;
 
@@ -30,10 +31,39 @@ public class UserStatupStatus {
     private Long startupId;
     private Integer status;
     private Date updatedTime;
+    // This area is copied from user table.
+    private String userArea;
+
+    /**
+     * it is startupId/area/status
+     */
+    @Index
+    private String findMentorKeyStartupidAreaStatus;
 
     public UserStatupStatus()
     {
 
+    }
+
+    public static String constructFindMentorKey(Long startupId, String area, Integer status)
+    {
+        return startupId + "/" + area + "/" + status;
+    }
+
+    public String getFindMentorKeyStartupidAreaStatus() {
+        return findMentorKeyStartupidAreaStatus;
+    }
+
+    public void setFindMentorKeyStartupidAreaStatus(String findMentorKeyStartupidAreaStatus) {
+        this.findMentorKeyStartupidAreaStatus = findMentorKeyStartupidAreaStatus;
+    }
+
+    public String getUserArea() {
+        return userArea;
+    }
+
+    public void setUserArea(String userArea) {
+        this.userArea = userArea;
     }
 
     public String getId() {

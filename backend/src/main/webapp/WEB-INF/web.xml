@@ -18,7 +18,8 @@
                 com.sociallearn.backend.api.UserEndpoint,
                 com.sociallearn.backend.api.StartupEndpoint,
                 com.sociallearn.backend.api.StartupSurveyApi,
-                com.sociallearn.backend.api.UserActivityEndpoint
+                com.sociallearn.backend.api.UserActivityEndpoint,
+                com.sociallearn.backend.api.FindMentorEndpoint
             </param-value>
         </init-param>
     </servlet>
