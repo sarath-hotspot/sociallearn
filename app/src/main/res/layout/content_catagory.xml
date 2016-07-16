@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:context="com.sociallearn.app.CatagoryActivity"
+tools:showIn="@layout/activity_catagory">
+
+
+<TableRow
+    android:layout_height="150dp"
+    android:layout_width="fill_parent"
+    android:layout_marginTop="50dp"
+    >
+
+    <Button
+        android:id="@+id/ecommerce"
+        android:text="Ecommerce"
+        android:layout_width="match_parent"
+        android:drawableTop="@android:drawable/ic_menu_search"
+        android:padding="30dp"
+        android:onClick="ecommerce"
+        android:layout_marginRight="20dp"
+        android:textAllCaps="false"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        />
+
+    <Button
+        android:id="@+id/Utilities"
+        android:layout_weight="1"
+        android:text="Utilities"
+        android:textAllCaps="false"
+        android:drawableTop="@android:drawable/ic_menu_search"
+        android:src="@mipmap/ic_launcher"
+        android:padding="30dp"
+        android:onClick="utilities"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</TableRow>
+    <TableRow
+        android:layout_height="150dp"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="50dp"
+        >
+
+        <Button
+            android:id="@+id/travel"
+            android:text="Travel"
+            android:onClick="travel"
+            android:textAllCaps="false"
+            android:drawableTop="@android:drawable/ic_menu_search"
+            android:layout_width="match_parent"
+            android:layout_marginRight="20dp"
+            android:padding="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            />
+
+        <Button
+            android:id="@+id/services"
+            android:layout_weight="1"
+            android:drawableTop="@android:drawable/ic_menu_search"
+            android:padding="30dp"
+            android:onClick="service"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Services"
+
+            />
+    </TableRow>
+    </TableLayout>
