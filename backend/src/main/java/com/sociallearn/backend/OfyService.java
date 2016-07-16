@@ -4,8 +4,13 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.sociallearn.backend.db.Interest;
+import com.sociallearn.backend.db.MentorLearnerAsssignment;
 import com.sociallearn.backend.db.StartupDetails;
+import com.sociallearn.backend.db.SurveyQuestion;
+import com.sociallearn.backend.db.SurveyQuestionResponse;
 import com.sociallearn.backend.db.User;
+import com.sociallearn.backend.db.UserActivity;
+import com.sociallearn.backend.db.UserStatupStatus;
 
 /**
  * Objectify service wrapper so we can statically register our persistence classes
@@ -19,6 +24,11 @@ public class OfyService {
         ObjectifyService.register(User.class);
         ObjectifyService.register(Interest.class);
         ObjectifyService.register(StartupDetails.class);
+        ObjectifyService.register(SurveyQuestion.class);
+        ObjectifyService.register(SurveyQuestionResponse.class);
+        ObjectifyService.register(UserStatupStatus.class);
+        ObjectifyService.register(UserActivity.class);
+        ObjectifyService.register(MentorLearnerAsssignment.class);
     }
 
     public static Objectify ofy() {

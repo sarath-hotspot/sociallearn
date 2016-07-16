@@ -14,8 +14,11 @@
         <init-param>
             <param-name>services</param-name>
             <param-value>com.sociallearn.backend.RegistrationEndpoint,
-                com.sociallearn.backend.MessagingEndpoint, com.sociallearn.backend.api.UserEndpoint,
-                com.sociallearn.backend.api.StartupEndpoint
+                com.sociallearn.backend.MessagingEndpoint,
+                com.sociallearn.backend.api.UserEndpoint,
+                com.sociallearn.backend.api.StartupEndpoint,
+                com.sociallearn.backend.api.StartupSurveyApi,
+                com.sociallearn.backend.api.UserActivityEndpoint
             </param-value>
         </init-param>
     </servlet>

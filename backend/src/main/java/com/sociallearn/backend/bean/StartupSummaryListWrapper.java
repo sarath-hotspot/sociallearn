@@ -6,17 +6,17 @@ import java.util.List;
  * Created by Sarath on 16-07-2016.
  */
 public class StartupSummaryListWrapper {
-    List<StartupSummary> summaryList;
+    List<StartupSummary> startupSummaryList;
 
-    public StartupSummaryListWrapper(List<StartupSummary> summaryList) {
-        this.summaryList = summaryList;
+    public StartupSummaryListWrapper(List<StartupSummary> startupSummaryList) {
+        this.startupSummaryList = startupSummaryList;
     }
 
-    public List<StartupSummary> getSummaryList() {
-        return summaryList;
+    public List<StartupSummary> getStartupSummaryList() {
+        return startupSummaryList;
     }
 
-    public void setSummaryList(List<StartupSummary> summaryList) {
-        this.summaryList = summaryList;
+    public void setStartupSummaryList(List<StartupSummary> startupSummaryList) {
+        this.startupSummaryList = startupSummaryList;
     }
 }

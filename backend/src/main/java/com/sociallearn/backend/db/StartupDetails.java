@@ -21,6 +21,24 @@ public class StartupDetails {
     private String iconUrl;
     private String bannerUrl;
     private String androidPackageId;
+    private String rewardStatement;
+    private Double rewardAmount;
+
+    public String getRewardStatement() {
+        return rewardStatement;
+    }
+
+    public void setRewardStatement(String rewardStatement) {
+        this.rewardStatement = rewardStatement;
+    }
+
+    public Double getRewardAmount() {
+        return rewardAmount;
+    }
+
+    public void setRewardAmount(Double rewardAmount) {
+        this.rewardAmount = rewardAmount;
+    }
 
     public String getStartupSmallDesc() {
         return startupSmallDesc;

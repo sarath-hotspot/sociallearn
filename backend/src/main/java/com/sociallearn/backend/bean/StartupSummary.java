@@ -10,7 +10,16 @@ public class StartupSummary {
     private Long interestId;
     private String startupName;
     private String startupSmallDesc;
+    private String androidPackage;
     private String iconUrl;
+
+    public String getAndroidPackage() {
+        return androidPackage;
+    }
+
+    public void setAndroidPackage(String androidPackage) {
+        this.androidPackage = androidPackage;
+    }
 
     public Long getStartupId() {
         return startupId;

@@ -3,11 +3,11 @@ package com.sociallearn.backend.api;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.config.DefaultValue;
 import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.config.Nullable;
 import com.google.appengine.repackaged.com.google.common.collect.ArrayListMultimap;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
 import com.sociallearn.backend.OfyService;
 import com.sociallearn.backend.bean.InterestListWrapper;
 import com.sociallearn.backend.bean.StartupApiStatus;
@@ -34,24 +34,18 @@ import java.util.List;
 )
 public class StartupEndpoint {
 
-    private static final Integer DEFAULT_BATCH_START = 0;
-    private static final Integer DEFAULT_BATCH_SIZE = 10;
+    private static final String DEFAULT_BATCH_START = "0";
+    private static final String DEFAULT_BATCH_SIZE = "10";
 
     @ApiMethod(name = "getInterests",
             path = "getInterests",
             httpMethod = ApiMethod.HttpMethod.GET)
     public InterestListWrapper getInterests(
-            @Named("batchStart") @Nullable Integer batchStart,
-            @Named("batchSize") @Nullable Integer batchSize) {
-        if (batchStart == null) {
-            batchStart = DEFAULT_BATCH_START;
-        }
-        if (batchSize == null) {
-            batchSize = DEFAULT_BATCH_SIZE;
-        }
+            @Named("batchStart") @Nullable @DefaultValue(DEFAULT_BATCH_START) Integer batchStart,
+            @Named("batchSize") @Nullable @DefaultValue(DEFAULT_BATCH_SIZE) Integer batchSize) {
 
         List<Interest> interests = new ArrayList<>(
-                ObjectifyService.ofy()
+                OfyService.ofy()
                         .load()
                         .type(Interest.class)
                         .offset(batchStart)
@@ -66,16 +60,9 @@ public class StartupEndpoint {
                 httpMethod = ApiMethod.HttpMethod.GET)
     public StartupSummaryListWrapper getStartupsByInterest(
             @Named("interestId") Long interestId,
-            @Named("batchStart") @Nullable Integer batchStart,
-            @Named("batchSize") @Nullable Integer batchSize)
+            @Named("batchStart") @Nullable @DefaultValue(DEFAULT_BATCH_START) Integer batchStart,
+            @Named("batchSize") @Nullable @DefaultValue(DEFAULT_BATCH_START) Integer batchSize)
     {
-        if (batchStart == null) {
-            batchStart = DEFAULT_BATCH_START;
-        }
-        if (batchSize == null) {
-            batchSize = DEFAULT_BATCH_SIZE;
-        }
-
         List<StartupDetails> startDetails = OfyService.ofy()
                 .load()
                 .type(StartupDetails.class)
@@ -91,6 +78,7 @@ public class StartupEndpoint {
             sm.setStartupName(sd.getStartupName());
             sm.setStartupSmallDesc(sd.getStartupSmallDesc());
             sm.setIconUrl(sd.getIconUrl());
+            sm.setAndroidPackage(sd.getAndroidPackageId());
             result.add(sm);
         }
 
@@ -112,10 +100,13 @@ public class StartupEndpoint {
     }
 
     @ApiMethod(name = "addInterest", path = "addInterest", httpMethod = ApiMethod.HttpMethod.POST)
-    public StartupApiStatus addInterest(@Named("name") String name)
+    public StartupApiStatus addInterest(
+            @Named("name") String name,
+            @Named("imageUrl") String imageUrl)
     {
         Interest i = new Interest();
         i.setInterestName(name);
+        i.setImageUrl(imageUrl);
         OfyService.ofy().save().entity(i).now();
         return new StartupApiStatus("Success");
     }
@@ -127,7 +118,9 @@ public class StartupEndpoint {
                            @Named("startupDesc") String startupDesc,
                            @Named("startupIconUrl") String startupIconUrl,
                            @Named("startupBannerUrl") String startupBannerUrl,
-                           @Named("startupAndroidPackageId") String androidPackageId)
+                           @Named("startupAndroidPackageId") String androidPackageId,
+                                       @Named("rewardStatement") String rewardStatement,
+                                       @Named("rewardAmount") Double rewardAmount)
     {
 
         // Validate interest id.
@@ -144,6 +137,8 @@ public class StartupEndpoint {
         sd.setIconUrl(startupIconUrl);
         sd.setBannerUrl(startupBannerUrl);
         sd.setAndroidPackageId(androidPackageId);
+        sd.setRewardStatement(rewardStatement);
+        sd.setRewardAmount(rewardAmount);
         OfyService.ofy().save().entity(sd).now();
 
         return new StartupApiStatus("Success");

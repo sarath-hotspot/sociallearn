@@ -3,6 +3,8 @@ package com.sociallearn.backend.db;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
+import java.util.Date;
+
 /**
  * Created by Sarath on 16-07-2016.
  */
@@ -12,6 +14,8 @@ public class User {
     private String userId;
     private String userName;
     private String area;
+    private String gender;
+    private Date dob;
     private String gcmRegistrationId;
 
     public String getUserId() {
@@ -44,5 +48,21 @@ public class User {
 
     public void setGcmRegistrationId(String gcmRegistrationId) {
         this.gcmRegistrationId = gcmRegistrationId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 }
