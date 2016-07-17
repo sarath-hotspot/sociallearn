@@ -40,10 +40,20 @@
             />
         </LinearLayout>
         <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_margin="@dimen/text_margin"
+        android:id="@+id/button2"
+        />
+
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:id="@+id/button2"
+            android:text="Reward"
+            android:onClick="reward"
+            android:id="@+id/reward"
             />
     </LinearLayout>
 

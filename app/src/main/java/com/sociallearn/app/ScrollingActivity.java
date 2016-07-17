@@ -2,12 +2,15 @@ package com.sociallearn.app;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -115,10 +118,24 @@ public class ScrollingActivity extends BaseActivity {
 
 
     }
+    public void reward(View v){
 
-    void setTitleName(String name){
-        setTitle(name);
+        new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog))
+                .setTitle("Reward")
+                .setMessage("Please install to get a reward of X amount")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
     }
+
 
 
     @Override
@@ -180,4 +197,5 @@ public class ScrollingActivity extends BaseActivity {
 
 
     }
+
 }

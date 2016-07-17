@@ -86,6 +86,7 @@ public class SessionManager {
 
 
     }
+
     public ArrayList<String> getApps(){
         Set<String> set = pref.getStringSet(VISITED_APPS, null);
         if(set == null)

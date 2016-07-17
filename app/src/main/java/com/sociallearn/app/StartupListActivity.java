@@ -64,6 +64,7 @@ public class StartupListActivity extends BaseActivity {
         PackageManager packageManager = getPackageManager();
         list = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
+
         Bundle b = getIntent().getExtras();
         String id = b.getString("interestid");
         getStartups(id);
