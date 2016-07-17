@@ -94,6 +94,17 @@ public class SessionManager {
         return new ArrayList<>(set);
     }
 
+    public void updateStatus(String key , String value) {
+
+        //AnyVehicleModel mvehicle  =new AnyVehicleModel();
+
+        editor.putString(key,value);
+        editor.commit();
+    }
+    public String getStatus(String key){
+        return pref.getString(key,"");
+    }
+
     public String getName() {
         return pref.getString(KEY_NAME,"");
     }

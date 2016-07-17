@@ -34,6 +34,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ScrollingActivity extends BaseActivity {
 
     ProgressDialog progressdiag;
@@ -66,22 +69,24 @@ public class ScrollingActivity extends BaseActivity {
 
         button = (Button)findViewById(R.id.button);
         button2 = (Button)findViewById(R.id.button2);
+        button2.setVisibility(View.VISIBLE);
         survey = (Button)findViewById(R.id.survey);
         survey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent in = new Intent(getApplicationContext(),SurveyActivity.class);
                 in.putExtra("id",startupid);
-                startActivity(in);
-                survey.setVisibility(View.GONE);
-                button2.setText("Help Others");
+                startActivityForResult(in,1);
+                //survey.setVisibility(View.GONE);
+                //button2.setText("Help Others");
 
             }
         });
 
         setTitle(b.getString("name"));
         sessionManager = new SessionManager(this);
-        String status = b.getString("status");
+        /*String status = b.getString("status");
         if(status.equals("Installed")){
 
             button.setText("Open App");
@@ -113,13 +118,24 @@ public class ScrollingActivity extends BaseActivity {
 
                 }
             });
-        }
+        }*/
         desc = (TextView)findViewById(R.id.description);
 
         getStartupDetails(startupid);
 
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            sessionManager.updateStatus(packageName,"mentor");
+            button2.setText("Help Others");
+            survey.setVisibility(View.GONE);
+        }
+    }
+
     public void reward(View v){
 
         new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog))
@@ -173,7 +189,7 @@ public class ScrollingActivity extends BaseActivity {
                             packageName = output.getString("androidPackageId");
                             Picasso.with(getApplicationContext()).load(output.getString("bannerUrl")).into(iv);
                             //setTitle(output.getString("startupName"));
-
+                            updateButtons(packageName);
 
 
 
@@ -194,6 +210,171 @@ public class ScrollingActivity extends BaseActivity {
             }
 
         });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+
+    }
+    void updateButtons(String key){
+        String val = sessionManager.getStatus(key);
+        if(val.equals("Fresh")){
+            button.setText("Try Now");
+            button2.setVisibility(View.GONE);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sessionManager.addToVisited(packageName);
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+packageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+packageName)));
+                    }
+                    finish();
+
+                }
+            });
+
+        }
+        else if(val.equals("Installed")){
+            button.setText("Open App");
+            button2.setText("Need Help?");
+            survey.setVisibility(View.VISIBLE);
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    learnerForMentor(startupid,sessionManager.getPhno());
+                }
+            });
+
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+                    if (launchIntent != null) {
+                        startActivity(launchIntent);//null pointer check in case package name was not found
+                    }
+                }
+            });
+
+        }
+        else if(val.equals("mentor")){
+            button.setText("Open App");
+            button2.setText("Help Others");
+            survey.setVisibility(View.GONE);
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mentorForLearner(startupid,sessionManager.getPhno());
+                }
+            });
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+                    if (launchIntent != null) {
+                        startActivity(launchIntent);//null pointer check in case package name was not found
+                    }
+                }
+            });
+
+        }
+    }
+    void learnerForMentor(final String id,final String userid){
+        progressdiag.show();
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://sociallearn-1310.appspot.com/_ah/api/userActivityApi/v1/userLookingForMentor";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("Waterwala", "Response is: " + response);
+                        try {
+
+
+
+
+
+                        }catch(Exception e){
+                            Log.i("Waterwala", "error here: ");
+                        }
+                        //session.setMachineID("WPBR00001");
+
+                        progressdiag.dismiss();
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Waterwala", "That didn't work!");
+            }
+
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("startupId", id);
+                params.put("userId", userid);
+                return params;
+            }
+        };
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+
+    }
+    void mentorForLearner(final String id,final String userid){
+        progressdiag.show();
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://sociallearn-1310.appspot.com/_ah/api/userActivityApi/v1/userRequestedToEnrollAsMentor";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("Waterwala", "Response is: " + response);
+                        try {
+
+
+
+
+
+                        }catch(Exception e){
+                            Log.i("Waterwala", "error here: ");
+                        }
+                        //session.setMachineID("WPBR00001");
+
+                        progressdiag.dismiss();
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Waterwala", "That didn't work!");
+            }
+
+        }){
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("startupId", id);
+                params.put("userId", userid);
+                return params;
+            }
+        };
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
 

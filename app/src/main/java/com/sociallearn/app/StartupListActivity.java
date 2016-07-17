@@ -40,6 +40,7 @@ public class StartupListActivity extends BaseActivity {
     ProgressDialog progressdiag;
     ArrayList results;
     List<ApplicationInfo> list;
+    SessionManager sessionManager;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private static String LOG_TAG = "StartupListActivity";
@@ -71,6 +72,7 @@ public class StartupListActivity extends BaseActivity {
         list = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
 
+        sessionManager =new SessionManager(this);
         Bundle b = getIntent().getExtras();
         String id = b.getString("interestid");
         getStartups(id);
@@ -83,14 +85,14 @@ public class StartupListActivity extends BaseActivity {
     }
     boolean isVisited(String packagename){
 
-        SessionManager sessionManager =new SessionManager(this);
-        ArrayList<String> arry = sessionManager.getApps();
 
-        if(arry.contains(packagename)){
-
-            return true;
+        String val = sessionManager.getStatus(packagename);
+        if(val.equals("")){
+            return false;
         }
-        return false;
+        else
+            return true;
+
     }
     boolean checkApp(String packagename){
         for(int i = 0;i<list.size();i++) {
@@ -157,11 +159,12 @@ public class StartupListActivity extends BaseActivity {
                                     if(checkApp(startup.getString("androidPackage"))) {
                                         Log.i("Waterwala", "inside ");
                                          if(isVisited(startup.getString("androidPackage"))){
-
+                                            sessionManager.updateStatus(startup.getString("androidPackage"),"Installed");
                                             so.setStatus("Installed");
                                             results.add(so);
                                         }
                                     } else {
+                                        sessionManager.updateStatus(startup.getString("androidPackage"),"Fresh");
                                         so.setStatus("Try Now");
                                         results.add(so);
                                     }
@@ -171,7 +174,7 @@ public class StartupListActivity extends BaseActivity {
                             }
 
                         }catch(Exception e){
-                            Log.i("Waterwala", "exception ");
+                            Log.i("Waterwala", "exception "+e.getStackTrace().toString());
                         }
                         //session.setMachineID("WPBR00001");
 

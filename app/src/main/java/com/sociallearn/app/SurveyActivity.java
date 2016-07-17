@@ -1,6 +1,7 @@
 package com.sociallearn.app;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -140,6 +141,8 @@ public class SurveyActivity extends BaseActivity {
     }
     public void submit(View view) {
 
+        Intent in = new Intent();
+        setResult(1,in);
         finish();
 
     }
