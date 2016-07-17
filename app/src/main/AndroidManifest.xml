@@ -151,12 +151,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:parentActivityName="com.chatintegration.app.MainActivity"
+            android:parentActivityName="com.sociallearn.app.CatagoryActivity"
             android:theme="@style/ApplozicTheme">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.chatintegration.app.MainActivity" />
+                android:value="com.sociallearn.app.CatagoryActivity" />
         </activity>
 
         <activity
