@@ -1,18 +1,19 @@
-package org.chittu.dubaigoldprices;
+package com.sociallearn.app;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.apptentive.android.sdk.Apptentive;
+import com.applozic.mobicomkit.api.conversation.Message;
+import com.applozic.mobicomkit.api.conversation.MobiComConversationService;
+import com.applozic.mobicomkit.api.notification.MobiComPushReceiver;
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.google.android.gms.gcm.GcmListenerService;
-import com.google.android.gms.gcm.GcmReceiver;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Sarath on 17-04-2016.
@@ -23,33 +24,49 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle bundle) {
         Log.i("GCM", "Received message from " + from + " Bundle=" + bundle);
 
-        GcmReceiver a;
-        String message = bundle.getString("message");
-        Apptentive.setPendingPushNotification(this, bundle);
-        startNotification(message);
+        // Check if it is chat bot message.
+        if (MobiComPushReceiver.isMobiComPushNotification(bundle)) {
+            Log.i("TAG", "Applozic notification processing...");
+            MobiComPushReceiver.processMessageAsync(this, bundle);
+            return;
+        } else {
+            handleInitiateChatWithLearnerCommand(bundle);
+        }
     }
 
-    private void startNotification(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this,
-                (int) System.currentTimeMillis(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+    private void handleInitiateChatWithLearnerCommand(Bundle bundle) {
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("New message from Dubai Gold Prices")
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+        String messageStr = bundle.getString("message");
+        if (messageStr == null) {
+            // Message is not there.
+            return;
+        }
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        try {
+            JSONObject message = new JSONObject(messageStr);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+            String command = message.getString("command");
+            if (!"initiateChatWithLearner".equals(command)) {
+                return;
+            }
+
+            String learnerUserId = message.getString("learnerUserId");
+            String learnerUserName = message.getString("learnerUserName");
+            String inviteMessage = message.getString("inviteMessage");
+
+            // Start chat.
+            Intent intent = new Intent(this, ConversationActivity.class);
+            intent.putExtra(ConversationUIService.USER_ID, learnerUserId);
+            intent.putExtra(ConversationUIService.DISPLAY_NAME, learnerUserName); //put it for displaying the title.
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            // Send starting message.
+            new MobiComConversationService(this).sendMessage(new
+                    Message(learnerUserId, inviteMessage));
+        } catch (JSONException e) {
+            Log.e("TAG", "Invalid GCM received.", e);
+            e.printStackTrace();
+        }
     }
 }

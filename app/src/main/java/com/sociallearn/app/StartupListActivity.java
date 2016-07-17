@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class StartupListActivity extends AppCompatActivity {
+public class StartupListActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
     ProgressDialog progressdiag;

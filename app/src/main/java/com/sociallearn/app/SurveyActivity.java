@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SurveyActivity extends AppCompatActivity {
+public class SurveyActivity extends BaseActivity {
 
     ProgressDialog progressdiag;
     LinearLayout ll,freetext;

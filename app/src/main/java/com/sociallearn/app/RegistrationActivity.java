@@ -41,7 +41,7 @@ import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends BaseActivity {
     private static final String TWITTER_KEY = "ynnj7aTTpdadv6x5fSSI7dQtL";
     private static final String TWITTER_SECRET = "khbdJeIZK0t6tUTKENRRVNeMCSttiUJnvx4hsA4rKJgpuzWd8t";
     AuthCallback nc;
@@ -138,6 +138,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
               }
         });
+    }
+
+    @Override
+    protected boolean shouldAddCommonMenuItems()
+    {
+        // Do not add default menu items(chat).
+        return false;
     }
 
     public void submit(View v){

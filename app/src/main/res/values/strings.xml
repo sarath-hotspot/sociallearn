@@ -106,11 +106,13 @@
     </string>
     <string name="title_activity_card_view">CardViewActivity</string>
     <string name="title_activity_interest">InterestActivity</string>
-    <string name="title_activity_catagory">CatagoryActivity</string>
-    <string name="title_activity_survey">SurveyActivity</string>
-    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="title_activity_catagory">SociaLearn</string>
+    <string name="title_activity_survey">Survey</string>
+    <string name="title_activity_registration">Registration</string>
 
     <!-- This is google console project id -->
     <string name="gcm_sender_id">608103985690</string>
     <string name="default_media_location_folder">SocialLearn</string>
+
+    <string name="GAE_url">https://sociallearn-1310.appspot.com/_ah/api</string>
 </resources>

@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.sociallearn.app.utils.ChatbotLoginUtils;
 import com.sociallearn.app.utils.SessionManager;
 
-public class CatagoryActivity extends AppCompatActivity {
+public class CatagoryActivity extends BaseActivity {
 
     SessionManager session;
     @Override
@@ -23,6 +24,10 @@ public class CatagoryActivity extends AppCompatActivity {
         if(!session.isLoggedIn()) {
             session.checkLogin();
             return;
+        }
+        else {
+            // User is logged in.
+            ChatbotLoginUtils.loginToChatbot(this);
         }
     }
     public void ecommerce(View view) {

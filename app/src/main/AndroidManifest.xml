@@ -36,7 +36,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -71,8 +71,7 @@
             android:label="@string/title_activity_registration"
             android:theme="@style/AppTheme.NoActionBar">
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-
+        </activity>
 
         <!-- [START gcm_receiver] -->
         <receiver
@@ -106,7 +105,7 @@
         <!-- [END instanceId_listener] -->
         <service
             android:name="com.sociallearn.app.RegistrationIntentService"
-            android:exported="false"></service>
+            android:exported="false"/>
 
 
         <!-- CHATBOT APPLOZIC -->
@@ -116,11 +115,11 @@
 
         <meta-data
             android:name="com.applozic.mobicomkit.notification.icon"
-            android:resource="@mipmap/ic_launcher_2" />  <!-- Launcher Icon -->
+            android:resource="@drawable/ic_launcher" />  <!-- Launcher Icon -->
 
         <meta-data
             android:name="com.applozic.mobicomkit.notification.smallIcon"
-            android:resource="@mipmap/ic_launcher_2" /> <!-- Launcher white Icon -->
+            android:resource="@drawable/ic_launcher" /> <!-- Launcher white Icon -->
 
         <meta-data
             android:name="share_text"
@@ -275,7 +274,5 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-    </activity>
-</application>
-
-    </manifest>
+    </application>
+</manifest>

@@ -93,6 +93,10 @@ public class SessionManager {
         return new ArrayList<>(set);
     }
 
+    public String getName() {
+        return pref.getString(KEY_NAME,"");
+    }
+
     public String getPhno(){
         return pref.getString(KEY_PHNO,"");
     }
@@ -102,6 +106,7 @@ public class SessionManager {
         editor.putString(KEY_PHNO, phno);
         editor.commit();
     }
+
 
     public String getEmail(){return pref.getString(KEY_EMAIL,"");}
 

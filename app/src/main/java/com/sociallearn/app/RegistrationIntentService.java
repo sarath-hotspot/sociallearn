@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
+import com.applozic.mobicomkit.api.account.user.PushNotificationTask;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.sociallearn.app.utils.SessionManager;
+import com.sociallearn.backend.db.userApi.UserApi;
 
 
 import java.io.IOException;
@@ -59,13 +64,51 @@ public class RegistrationIntentService extends IntentService {
 
     private void sendRegistrationToServer(String token) throws IOException {
 
-//        Registration.Builder builder = new Registration.Builder(
-//                AndroidHttp.newCompatibleTransport(),
-//                new AndroidJsonFactory(),
-//                null);
-//        builder.setRootUrl(getString(R.string.GAE_url));
-//        builder.build().register(token).execute();
-    // Send notification to our server and chat bot.
+        // Step#1 Inform our server about GCM token.
+        sendGCMRegIdToOurServer(token);
 
+        // Step#2 Inform chat bot about gcm registration id.
+        sendGCMRegIdToChatbotServer(token);
+    }
+
+    private void sendGCMRegIdToChatbotServer(String token) {
+        SessionManager sm = new SessionManager(this);
+
+        // We never reach this point unless, user is authenticated.
+        String userId = sm.getPhno();
+        String name = sm.getName();
+        PushNotificationTask.TaskListener listener = new PushNotificationTask.TaskListener() {
+
+            @Override
+            public void onSuccess(RegistrationResponse registrationResponse) {
+                Log.i("TAG", "Notified to chatbot about GCM token");
+            }
+
+            @Override
+            public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
+                Log.i("TAG", "Could not send GCM token to chatbot");
+            }
+        };
+
+        PushNotificationTask pushNotificationTask = new PushNotificationTask(token, listener, this);
+        pushNotificationTask.execute((Void) null);
+
+    }
+
+    private void sendGCMRegIdToOurServer(String token) {
+        SessionManager sm = new SessionManager(this);
+
+        // We never reach this point unless, user is authenticated.
+        String userId = sm.getPhno();
+
+        UserApi.Builder builder = new UserApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+        builder.setRootUrl(getString(R.string.GAE_url));
+        try {
+            builder.build().updateUserGcmRegistrationId(token, userId).execute();
+            Log.i("TAG", "Successfully sent gcm token to our servers.");
+        } catch (IOException e) {
+            Log.i("TAG", "Failed to send gcm token to our servers. " + e);
+            Toast.makeText(this, "Could not notify backend about GCM. " + e, Toast.LENGTH_LONG).show();
+        }
     }
 }

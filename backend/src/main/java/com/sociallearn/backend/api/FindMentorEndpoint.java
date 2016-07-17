@@ -43,7 +43,7 @@ public class FindMentorEndpoint {
     private static final Logger LOG = Logger.getLogger(FindMentorEndpoint.class.getName());
 
     private static final String API_KEY = System.getProperty("gcm.api.key");
-    private static final String QUEUE_NAME =  "findMentorQueue";
+    private static final String QUEUE_NAME = "findMentorQueue";
 
     @ApiMethod(name = "findMentorAndInformMentorAboutLearner",
             path = "findMentorAndInformMentorAboutLearner",
@@ -78,10 +78,14 @@ public class FindMentorEndpoint {
         return sendGCMNotificationToMentor(startupId, mentorStatus.getUserId(), userId);
     }
 
-    private FindMentorApiStatus sendGCMNotificationToMentor(
-            Long startupId,
-            String mentorUserId,
-            String learnerUserId) {
+
+    @ApiMethod(name = "sendGCMNotificationToMentor",
+            path = "sendGCMNotificationToMentor",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public FindMentorApiStatus sendGCMNotificationToMentor(
+            @Named("startupId") Long startupId,
+            @Named("mentorUserId") String mentorUserId,
+            @Named("learnerUserId") String learnerUserId) {
         // Get mentor user object.
         User mentorUser = OfyService.ofy().load().key(Key.create(User.class, mentorUserId)).now();
         if (mentorUser.getGcmRegistrationId() == null) {
@@ -148,6 +152,7 @@ public class FindMentorEndpoint {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("command", "initiateChatWithLearner");
         jsonObject.put("learnerUserId", learnerUser.getUserId());
+        jsonObject.put("learnerUserName", learnerUser.getUserName());
 
         // Construct invite message.
         StringBuilder inviteMessage = new StringBuilder();
