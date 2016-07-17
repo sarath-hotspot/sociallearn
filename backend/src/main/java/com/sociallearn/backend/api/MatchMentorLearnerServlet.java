@@ -4,12 +4,8 @@ import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
-import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.sociallearn.backend.OfyService;
 import com.sociallearn.backend.bean.FindMentorApiStatus;
@@ -23,34 +19,32 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import static com.sociallearn.backend.OfyService.ofy;
 
 /**
- * Created by Sarath on 16-07-2016.
+ * Created by Sarath on 17-07-2016.
  */
-@Api(
-        name = "findMentorApi",
-        version = "v1",
-        resource = "user",
-        namespace = @ApiNamespace(
-                ownerDomain = "db.backend.sociallearn.com",
-                ownerName = "db.backend.sociallearn.com",
-                packagePath = ""
-        )
-)
-public class FindMentorEndpoint {
+public class MatchMentorLearnerServlet extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(FindMentorEndpoint.class.getName());
-
+    private static final Logger LOG = Logger.getLogger(MatchMentorLearnerServlet.class.getName());
     private static final String API_KEY = System.getProperty("gcm.api.key");
     private static final String QUEUE_NAME = "findMentorQueue";
 
-    @ApiMethod(name = "findMentorAndInformMentorAboutLearner",
-            path = "findMentorAndInformMentorAboutLearner",
-            httpMethod = ApiMethod.HttpMethod.GET)
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        String userId = request.getParameter("userId");
+        Long startupId = Long.parseLong(request.getParameter("startupId"));
+        findMentorAndInformMentorAboutLearner(userId, startupId);
+    }
+
     public FindMentorApiStatus findMentorAndInformMentorAboutLearner(
-            @Named("userId") String userId,
-            @Named("startupId") Long startupId) {
+            String userId,
+            Long startupId) {
         LOG.info("fineMendtor call. userId=" + userId + " startupId=" + startupId);
 
         // Get user object.
@@ -83,14 +77,10 @@ public class FindMentorEndpoint {
         return sendGCMNotificationToMentor(startupId, mentorStatus.getUserId(), userId);
     }
 
-
-    @ApiMethod(name = "sendGCMNotificationToMentor",
-            path = "sendGCMNotificationToMentor",
-            httpMethod = ApiMethod.HttpMethod.POST)
-    public FindMentorApiStatus sendGCMNotificationToMentor(
-            @Named("startupId") Long startupId,
-            @Named("mentorUserId") String mentorUserId,
-            @Named("learnerUserId") String learnerUserId) {
+    private FindMentorApiStatus sendGCMNotificationToMentor(
+            Long startupId,
+            String mentorUserId,
+            String learnerUserId) {
         // Get mentor user object.
         User mentorUser = OfyService.ofy().load().key(Key.create(User.class, mentorUserId)).now();
         if (mentorUser.getGcmRegistrationId() == null) {
@@ -134,25 +124,6 @@ public class FindMentorEndpoint {
         return new FindMentorApiStatus("Success");
     }
 
-    public static void main(String args[]) {
-        StartupDetails s = new StartupDetails();
-        s.setStartupId(1L);
-        s.setStartupName("One startup");
-        s.setAndroidPackageId("com.one");
-
-        User mentor = new User();
-        mentor.setArea("Gachibowli");
-        mentor.setUserId("9298456005");
-        mentor.setUserName("Sarath");
-
-        User learner = new User();
-        learner.setArea("Gachibowli");
-        learner.setUserId("9298456009");
-        learner.setUserName("Learner");
-
-        String json = new FindMentorEndpoint().constructGCMJsonMessage(s, mentor, learner);
-        System.out.println(json);
-    }
 
     private String constructGCMJsonMessage(StartupDetails startup, User mentorUser, User learnerUser) {
         JSONObject jsonObject = new JSONObject();
@@ -169,18 +140,5 @@ public class FindMentorEndpoint {
         jsonObject.put("inviteMessage", inviteMessage.toString());
 
         return jsonObject.toJSONString();
-    }
-
-    public static final void enqueueTaskToFindMentor(String userId, Long startupId) {
-        String url = "/tasks/MatchMentorLearnerServlet";
-        String finalUrl = String.format(url, userId, startupId);
-
-        TaskOptions task = TaskOptions.Builder
-                .withUrl(finalUrl)
-                .method(TaskOptions.Method.GET)
-                .param("userId", userId)
-                .param("startupId", Long.toString(startupId));
-        QueueFactory.getQueue(QUEUE_NAME).add(task);
-        LOG.info("Scheduled task to find mentor for userId=" + userId + " startupId=" + startupId);
     }
 }
