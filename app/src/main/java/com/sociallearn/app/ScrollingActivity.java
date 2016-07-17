@@ -52,6 +52,8 @@ public class ScrollingActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         iv = (ImageView) findViewById(R.id.prof_img_picBackground);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //setTitle("WaterWala");
 

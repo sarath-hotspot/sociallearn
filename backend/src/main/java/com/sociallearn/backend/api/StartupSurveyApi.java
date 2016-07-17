@@ -54,6 +54,10 @@ public class StartupSurveyApi {
             path = "getSurveyQuestionsByStartupId")
     public StartupSurveyQuestionListWrapper getSurveyQuestionsByStartupId(
             @Named("startupId") Long startupId) {
+
+        // Hardcoding startup id to avoid manual data entry.
+        startupId = 5659313586569216L;
+
         return new StartupSurveyQuestionListWrapper(new ArrayList<SurveyQuestion>(
                 OfyService.ofy()
                         .load()

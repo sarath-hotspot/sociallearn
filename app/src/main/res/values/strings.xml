@@ -104,7 +104,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_card_view">CardViewActivity</string>
+    <string name="title_activity_card_view">Startup list</string>
     <string name="title_activity_interest">InterestActivity</string>
     <string name="title_activity_catagory">SociaLearn</string>
     <string name="title_activity_survey">Survey</string>

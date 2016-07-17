@@ -37,6 +37,9 @@ public class SurveyActivity extends BaseActivity {
         setContentView(R.layout.activity_survey);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         progressdiag = new ProgressDialog(this);
         progressdiag.setIndeterminate(false);
         progressdiag.setProgressStyle(ProgressDialog.STYLE_SPINNER);

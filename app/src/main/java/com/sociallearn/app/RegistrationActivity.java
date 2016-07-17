@@ -57,6 +57,9 @@ public class RegistrationActivity extends BaseActivity {
         setContentView(R.layout.activity_registration);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         name = (EditText)findViewById(R.id.name);
         phno = (EditText)findViewById(R.id.phno);
