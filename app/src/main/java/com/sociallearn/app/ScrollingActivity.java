@@ -42,7 +42,7 @@ public class ScrollingActivity extends BaseActivity {
     ProgressDialog progressdiag;
     TextView desc;
     String startupid;
-    Button button,survey,button2;
+    Button button, survey, button2;
     String packageName;
     SessionManager sessionManager;
     ImageView iv;
@@ -67,17 +67,17 @@ public class ScrollingActivity extends BaseActivity {
         Bundle b = getIntent().getExtras();
         startupid = b.getString("id");
 
-        button = (Button)findViewById(R.id.button);
-        button2 = (Button)findViewById(R.id.button2);
+        button = (Button) findViewById(R.id.button);
+        button2 = (Button) findViewById(R.id.button2);
         button2.setVisibility(View.VISIBLE);
-        survey = (Button)findViewById(R.id.survey);
+        survey = (Button) findViewById(R.id.survey);
         survey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent in = new Intent(getApplicationContext(),SurveyActivity.class);
-                in.putExtra("id",startupid);
-                startActivityForResult(in,1);
+                Intent in = new Intent(getApplicationContext(), SurveyActivity.class);
+                in.putExtra("id", startupid);
+                startActivityForResult(in, 1);
                 //survey.setVisibility(View.GONE);
                 //button2.setText("Help Others");
 
@@ -119,7 +119,7 @@ public class ScrollingActivity extends BaseActivity {
                 }
             });
         }*/
-        desc = (TextView)findViewById(R.id.description);
+        desc = (TextView) findViewById(R.id.description);
 
         getStartupDetails(startupid);
 
@@ -129,14 +129,21 @@ public class ScrollingActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 1){
-            sessionManager.updateStatus(packageName,"mentor");
+        if (resultCode == 1) {
+            sessionManager.updateStatus(packageName, "mentor");
             button2.setText("Help Others");
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mentorForLearner(startupid, sessionManager.getPhno());
+                }
+            });
+
             survey.setVisibility(View.GONE);
         }
     }
 
-    public void reward(View v){
+    public void reward(View v) {
 
         new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog))
                 .setTitle("Reward")
@@ -155,7 +162,6 @@ public class ScrollingActivity extends BaseActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -171,10 +177,10 @@ public class ScrollingActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void getStartupDetails(final String id){
+    void getStartupDetails(final String id) {
         progressdiag.show();
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://sociallearn-1310.appspot.com/_ah/api/startupApi/v1/getStartupDetails?startupId="+id;
+        String url = "https://sociallearn-1310.appspot.com/_ah/api/startupApi/v1/getStartupDetails?startupId=" + id;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -192,9 +198,7 @@ public class ScrollingActivity extends BaseActivity {
                             updateButtons(packageName);
 
 
-
-
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             Log.i("Waterwala", "error here: ");
                         }
                         //session.setMachineID("WPBR00001");
@@ -215,9 +219,10 @@ public class ScrollingActivity extends BaseActivity {
 
 
     }
-    void updateButtons(String key){
+
+    void updateButtons(String key) {
         String val = sessionManager.getStatus(key);
-        if(val.equals("Fresh")){
+        if (val.equals("Fresh")) {
             button.setText("Try Now");
             button2.setVisibility(View.GONE);
             button.setOnClickListener(new View.OnClickListener() {
@@ -225,17 +230,16 @@ public class ScrollingActivity extends BaseActivity {
                 public void onClick(View v) {
                     sessionManager.addToVisited(packageName);
                     try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+packageName)));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
                     } catch (android.content.ActivityNotFoundException anfe) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+packageName)));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
                     }
                     finish();
 
                 }
             });
 
-        }
-        else if(val.equals("Installed")){
+        } else if (val.equals("Installed")) {
             button.setText("Open App");
             button2.setText("Need Help?");
             survey.setVisibility(View.VISIBLE);
@@ -243,7 +247,7 @@ public class ScrollingActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    learnerForMentor(startupid,sessionManager.getPhno());
+                    learnerForMentor(startupid, sessionManager.getPhno());
                 }
             });
 
@@ -259,8 +263,7 @@ public class ScrollingActivity extends BaseActivity {
                 }
             });
 
-        }
-        else if(val.equals("mentor")){
+        } else if (val.equals("mentor")) {
             button.setText("Open App");
             button2.setText("Help Others");
             survey.setVisibility(View.GONE);
@@ -268,7 +271,7 @@ public class ScrollingActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
 
-                    mentorForLearner(startupid,sessionManager.getPhno());
+                    mentorForLearner(startupid, sessionManager.getPhno());
                 }
             });
             button.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +287,8 @@ public class ScrollingActivity extends BaseActivity {
 
         }
     }
-    void learnerForMentor(final String id,final String userid){
+
+    void learnerForMentor(final String id, final String userid) {
         progressdiag.show();
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://sociallearn-1310.appspot.com/_ah/api/userActivityApi/v1/userLookingForMentor";
@@ -299,10 +303,7 @@ public class ScrollingActivity extends BaseActivity {
                         try {
 
 
-
-
-
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             Log.i("Waterwala", "error here: ");
                         }
                         //session.setMachineID("WPBR00001");
@@ -317,10 +318,9 @@ public class ScrollingActivity extends BaseActivity {
                 Log.i("Waterwala", "That didn't work!");
             }
 
-        }){
+        }) {
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("startupId", id);
                 params.put("userId", userid);
@@ -332,13 +332,14 @@ public class ScrollingActivity extends BaseActivity {
 
 
     }
-    void mentorForLearner(final String id,final String userid){
+
+    void mentorForLearner(final String id, final String userid) {
         progressdiag.show();
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://sociallearn-1310.appspot.com/_ah/api/userActivityApi/v1/userRequestedToEnrollAsMentor";
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -347,10 +348,7 @@ public class ScrollingActivity extends BaseActivity {
                         try {
 
 
-
-
-
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             Log.i("Waterwala", "error here: ");
                         }
                         //session.setMachineID("WPBR00001");
@@ -365,10 +363,9 @@ public class ScrollingActivity extends BaseActivity {
                 Log.i("Waterwala", "That didn't work!");
             }
 
-        }){
+        }) {
             @Override
-            protected Map<String, String> getParams()
-            {
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("startupId", id);
                 params.put("userId", userid);

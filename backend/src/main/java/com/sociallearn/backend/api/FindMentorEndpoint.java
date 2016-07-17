@@ -51,9 +51,12 @@ public class FindMentorEndpoint {
     public FindMentorApiStatus findMentorAndInformMentorAboutLearner(
             @Named("userId") String userId,
             @Named("startupId") Long startupId) {
+        LOG.info("fineMendtor call. userId=" + userId + " startupId=" + startupId);
+
         // Get user object.
         User user = OfyService.ofy().load().key(Key.create(User.class, userId)).now();
         if (user == null) {
+            LOG.severe("Learner not found. " + userId);
             // ignore such messages.
             return new FindMentorApiStatus("UserId with id " + userId + " is not in system. Ignoring this task");
         }
@@ -70,11 +73,13 @@ public class FindMentorEndpoint {
                 .filter("findMentorKeyStartupidAreaStatus =", findMentorSearchKey)
                 .list();
         if (mentors.isEmpty()) {
+            LOG.severe("No mentors found.");
             return new FindMentorApiStatus("No mentors found.");
         }
 
         // Got the mentor construct json and send GCM push notification.
         UserStatupStatus mentorStatus = mentors.get(0);
+        LOG.severe("Selected mentor " + mentorStatus.getUserId());
         return sendGCMNotificationToMentor(startupId, mentorStatus.getUserId(), userId);
     }
 
@@ -89,6 +94,7 @@ public class FindMentorEndpoint {
         // Get mentor user object.
         User mentorUser = OfyService.ofy().load().key(Key.create(User.class, mentorUserId)).now();
         if (mentorUser.getGcmRegistrationId() == null) {
+            LOG.severe("Mentor GCM code is not registered" + mentorUserId);
             return new FindMentorApiStatus("Mentor GCM code is not registered with us");
         }
 
