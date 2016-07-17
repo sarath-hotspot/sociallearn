@@ -20,8 +20,7 @@ public class CatagoryActivity extends BaseActivity {
         setContentView(R.layout.activity_catagory);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         session = new SessionManager(getApplicationContext());
         if(!session.isLoggedIn()) {

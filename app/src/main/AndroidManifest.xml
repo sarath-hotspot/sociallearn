@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -52,11 +52,7 @@
             android:name=".CatagoryActivity"
             android:label="@string/title_activity_catagory"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SurveyActivity"
@@ -81,14 +77,16 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.sociallearn.app" />
             </intent-filter>
         </receiver>
         <!-- [END gcm_receiver] -->
 
+
         <!-- [START gcm_listener] -->
         <service
-            android:name="com.sociallearn.app.MyGcmListenerService"
+            android:name=".MyGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -97,7 +95,7 @@
         <!-- [END gcm_listener] -->
         <!-- [START instanceId_listener] -->
         <service
-            android:name="com.sociallearn.app.MyInstanceIDListenerService"
+            android:name=".MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
@@ -105,36 +103,43 @@
         </service>
         <!-- [END instanceId_listener] -->
         <service
-            android:name="com.sociallearn.app.RegistrationIntentService"
-            android:exported="false"/>
-
+            android:name=".RegistrationIntentService"
+            android:exported="false" />
 
         <!-- CHATBOT APPLOZIC -->
         <meta-data
             android:name="com.applozic.application.key"
-            android:value="3681d2f375925cf86f3101113e208c8b3" /> <!-- Applozic Application Key -->
+            android:value="3681d2f375925cf86f3101113e208c8b3" />
+        <!-- Applozic Application Key -->
 
         <meta-data
             android:name="com.applozic.mobicomkit.notification.icon"
-            android:resource="@drawable/ic_launcher" />  <!-- Launcher Icon -->
+            android:resource="@drawable/ic_launcher" />
+        <!-- Launcher Icon -->
 
         <meta-data
             android:name="com.applozic.mobicomkit.notification.smallIcon"
-            android:resource="@drawable/ic_launcher" /> <!-- Launcher white Icon -->
+            android:resource="@drawable/ic_launcher" />
+        <!-- Launcher white Icon -->
 
         <meta-data
             android:name="share_text"
-            android:value="Invite message" />  <!-- Invite Message -->
+            android:value="Invite message" />
+        <!-- Invite Message -->
 
         <meta-data
             android:name="main_folder_name"
-            android:value="@string/default_media_location_folder" /> <!-- Attachment Folder Name -->
+            android:value="@string/default_media_location_folder" />
+        <!-- Attachment Folder Name -->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI" />  <!--Replace with your geo api key from google developer console  -->
-        <!-- For testing purpose use AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI
-        To disable the location sharing via map add this line ApplozicSetting.getInstance(context).disableLocationSharingViaMap(); in onSuccess of Applozic UserLoginTask -->
+            android:value="AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI" />
+        <!-- Replace with your geo api key from google developer console -->
+        <!--
+        For testing purpose use AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI
+        To disable the location sharing via map add this line ApplozicSetting.getInstance(context).disableLocationSharingViaMap(); in onSuccess of Applozic UserLoginTask
+        -->
 
         <meta-data
             android:name="activity.open.on.notification"
@@ -153,12 +158,12 @@
             android:launchMode="singleTask"
             android:parentActivityName="com.sociallearn.app.CatagoryActivity"
             android:theme="@style/ApplozicTheme">
+
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sociallearn.app.CatagoryActivity" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.people.activity.MobiComKitPeopleActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -166,30 +171,32 @@
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:theme="@style/Applozic.People.Theme"
             android:windowSoftInputMode="adjustResize">
+
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable_contacts" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.FullScreenImageActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Image"
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:theme="@style/Applozic_FullScreen_Theme">
+
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ContactSelectionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -200,7 +207,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ChannelCreateActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -211,14 +217,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ChannelNameActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
-            android:theme="@style/ApplozicTheme"></activity>
-
+            android:theme="@style/ApplozicTheme" />
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ChannelInfoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -229,7 +233,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.MobiComAttachmentSelectorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -241,24 +244,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
         </activity>
-
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.MobicomLocationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:theme="@style/ApplozicTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name="com.applozic.mobicomkit.api.conversation.MessageIntentService"
             android:exported="false" />
-
         <service android:name="org.eclipse.paho.android.service.MqttService" />
-
         <service
             android:name="com.applozic.mobicomkit.api.conversation.ApplozicIntentService"
             android:exported="false" />
-
         <service
             android:name="com.applozic.mobicomkit.api.conversation.ApplozicMqttIntentService"
             android:exported="false" />
@@ -269,7 +268,6 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name="com.applozic.mobicomkit.broadcast.ConnectivityReceiver"
             android:enabled="true"
@@ -279,7 +277,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name="com.applozic.mobicomkit.uiwidgets.notification.MTNotificationBroadcastReceiver"
             android:exported="false">
@@ -287,5 +284,17 @@
                 <action android:name="${applicationId}.send.notification" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".StartActivity"
+            android:label="@string/title_activity_start"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
+
 </manifest>

@@ -115,4 +115,5 @@
     <string name="default_media_location_folder">SocialLearn</string>
 
     <string name="GAE_url">https://sociallearn-1310.appspot.com/_ah/api</string>
+    <string name="title_activity_start">StartActivity</string>
 </resources>
