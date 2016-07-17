@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -135,6 +136,10 @@
         <!-- For testing purpose use AIzaSyAYB1vPc4cpn_FJv68eS_ZGe1UasBNwxLI
         To disable the location sharing via map add this line ApplozicSetting.getInstance(context).disableLocationSharingViaMap(); in onSuccess of Applozic UserLoginTask -->
 
+        <meta-data
+            android:name="activity.open.on.notification"
+            android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
+
         <!-- NOTE: Do NOT change this, it should remain same i.e 'com.package.name' -->
         <meta-data
             android:name="com.package.name"
@@ -242,7 +247,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:theme="@style/ApplozicTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"/>
 
         <service
             android:name="com.applozic.mobicomkit.api.conversation.MessageIntentService"
@@ -272,6 +277,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.applozic.mobicomkit.uiwidgets.notification.MTNotificationBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="${applicationId}.send.notification" />
             </intent-filter>
         </receiver>
     </application>
